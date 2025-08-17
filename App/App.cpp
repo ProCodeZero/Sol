@@ -5,6 +5,9 @@
 // Function types for DLL imports
 typedef void (*PRINTSYSTEMMETRICS)();
 typedef void (*PRINTSYSTEMPARAMETERS)();
+typedef void (*PRINTSYSTEMPATHS)();
+typedef void (*PRINTOSVERSION)();
+typedef void (*PRINTDATETIME)();
 
 int main()
 {
@@ -16,6 +19,33 @@ int main()
     PrintDomainName();
     PrintUserName();
     PrintFullUserName();
+
+    // Load InfoDLL explicitly
+    HMODULE hInfo = LoadLibraryA("InfoDLL.dll");
+    if (hInfo) {
+        std::cout << "\nSystem Paths:\n";
+        std::cout << "-----------------\n";
+        auto printPaths = (PRINTSYSTEMPATHS)GetProcAddress(hInfo, "PrintSystemPaths");
+        if (printPaths) {
+            printPaths();
+        }
+
+        std::cout << "\nOperating System Information:\n";
+        std::cout << "-----------------\n";
+        auto printOSVersion = (PRINTOSVERSION)GetProcAddress(hInfo, "PrintOSVersion");
+        if (printOSVersion) {
+            printOSVersion();
+        }
+
+        std::cout << "\nDate and Time Information:\n";
+        std::cout << "-----------------\n";
+        auto printDateTime = (PRINTDATETIME)GetProcAddress(hInfo, "PrintDateTime");
+        if (printDateTime) {
+            printDateTime();
+        }
+
+        FreeLibrary(hInfo);
+    }
 
     std::cout << "\nSystem Metrics (Explicit):\n";
     std::cout << "-----------------\n";
