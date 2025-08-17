@@ -3,8 +3,13 @@
 
 int main()
 {
-    std::cout << "Fuck you C++!\n";
-    int res = Sum(1, 2);
-    std::cout << "Sum is: ";
-    std::cout << res;
+    std::cout << "System Information:\n";
+    std::cout << "-----------------\n";
+    
+    PrintComputerName();
+    PrintDomainName();
+    PrintUserName();
+    PrintFullUserName();
+    
+    return 0;
 }

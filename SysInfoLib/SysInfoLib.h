@@ -1,2 +1,6 @@
 #pragma once
-extern int Sum(int a, int b);
+
+void PrintComputerName();
+void PrintDomainName(); 
+void PrintUserName();
+void PrintFullUserName();
