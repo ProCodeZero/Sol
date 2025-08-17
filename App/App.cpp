@@ -1,13 +1,12 @@
 #include <iostream>
 #include <Windows.h>
 #include <SysInfoLib.h>
+#include "../InfoDLL/InfoDLL.h"
+#pragma comment(lib, "InfoDLL.lib")
 
 // Function types for DLL imports
 typedef void (*PRINTSYSTEMMETRICS)();
 typedef void (*PRINTSYSTEMPARAMETERS)();
-typedef void (*PRINTSYSTEMPATHS)();
-typedef void (*PRINTOSVERSION)();
-typedef void (*PRINTDATETIME)();
 
 int main()
 {
@@ -20,32 +19,18 @@ int main()
     PrintUserName();
     PrintFullUserName();
 
-    // Load InfoDLL explicitly
-    HMODULE hInfo = LoadLibraryA("InfoDLL.dll");
-    if (hInfo) {
-        std::cout << "\nSystem Paths:\n";
-        std::cout << "-----------------\n";
-        auto printPaths = (PRINTSYSTEMPATHS)GetProcAddress(hInfo, "PrintSystemPaths");
-        if (printPaths) {
-            printPaths();
-        }
+    // InfoDLL implicit linking
+    std::cout << "\nSystem Paths:\n";
+    std::cout << "-----------------\n";
+    PrintSystemPaths();
 
-        std::cout << "\nOperating System Information:\n";
-        std::cout << "-----------------\n";
-        auto printOSVersion = (PRINTOSVERSION)GetProcAddress(hInfo, "PrintOSVersion");
-        if (printOSVersion) {
-            printOSVersion();
-        }
+    std::cout << "\nOperating System Information:\n";
+    std::cout << "-----------------\n";
+    PrintOSVersion();
 
-        std::cout << "\nDate and Time Information:\n";
-        std::cout << "-----------------\n";
-        auto printDateTime = (PRINTDATETIME)GetProcAddress(hInfo, "PrintDateTime");
-        if (printDateTime) {
-            printDateTime();
-        }
-
-        FreeLibrary(hInfo);
-    }
+    std::cout << "\nDate and Time Information:\n";
+    std::cout << "-----------------\n";
+    PrintDateTime();
 
     std::cout << "\nSystem Metrics (Explicit):\n";
     std::cout << "-----------------\n";
